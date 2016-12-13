@@ -8,6 +8,8 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
   if (isset($_GET['delete']) || isset($_GET['ban']) || isset($_GET['switch']) ||
     isset($_GET['list'])) {
     if ($_SESSION['csrfKey'] != $_GET['csrfKey']) {
+      echo "<pre>" . $_SESSION['csrfKey'] . "</pre>";
+      echo "<pre>" . $_GET['csrfKey'] . "</pre>";
       die("Lehetséges CSRF támadás!");
     }
   }
@@ -74,7 +76,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
           : "<a href='admin_page.php?switch=$id&value=1&csrfKey=$csrfToken&list' class='btn btn-warning $class'>Admin jog megadása</a>";
         $ban_button = $is_active ?
           "<a href='admin_page.php?ban=$id&value=0&csrfKey=$csrfToken&list' class='btn btn-warning'>Tiltás</a>"
-          : "<a href='admin_page.php?ban=$id&value=1csrfKey=$csrfToken&&list' class='btn btn-warning'>Aktiválás</a>";
+          : "<a href='admin_page.php?ban=$id&value=1&csrfKey=$csrfToken&list' class='btn btn-warning'>Aktiválás</a>";
         echo "<div class='row list-item'>";
         echo "<li $class>";
         if ($is_admin) echo "<strong>";
