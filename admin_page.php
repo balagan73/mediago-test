@@ -8,8 +8,6 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
   if (isset($_GET['delete']) || isset($_GET['ban']) || isset($_GET['switch']) ||
     isset($_GET['list'])) {
     if ($_SESSION['csrfKey'] != $_GET['csrfKey']) {
-      echo "<pre>" . $_SESSION['csrfKey'] . "</pre>";
-      echo "<pre>" . $_GET['csrfKey'] . "</pre>";
       die("Lehetséges CSRF támadás!");
     }
   }
