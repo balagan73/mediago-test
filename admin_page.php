@@ -57,7 +57,6 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
         $is_active = $user['is_active'];
         $login_time = $user['login_time'];
         $reg_date = $user['reg_date'];
-        $color = $is_admin ? "red" : "black";
         $class = $is_admin ? "class='text-danger'" : "class='text-info'";
         $admin_button = $is_admin ?
           "<a href='admin_page.php?switch=$id&value=0&list' class='btn btn-warning'>Admin jog elvétele</a>"
