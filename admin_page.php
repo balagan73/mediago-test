@@ -38,6 +38,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
     $navbar = "<nav class='navbar navbar-default'>
     <div class='container-fluid'>
       <ul class='nav navbar-nav navbar-right'>
+        <li class=><a href='login.php'>Belépés</a></li>
         <li class='active'><a href='logout.php'>Kilépés</a></li>
       </ul>
     </div>
@@ -57,19 +58,19 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
         $login_time = $user['login_time'];
         $reg_date = $user['reg_date'];
         $color = $is_admin ? "red" : "black";
+        $class = $is_admin ? "class='text-danger'" : "class='text-info'";
         $admin_button = $is_admin ?
-          "<a href='admin_page.php?switch=$id&value=0&list'>Admin jog elvétele</a>"
-          : "<a href='admin_page.php?switch=$id&value=1&list'>Admin jog megadása</a>";
+          "<a href='admin_page.php?switch=$id&value=0&list' class='btn btn-warning'>Admin jog elvétele</a>"
+          : "<a href='admin_page.php?switch=$id&value=1&list' class='btn btn-warning $class'>Admin jog megadása</a>";
         $ban_button = $is_active ?
-          "<a href='admin_page.php?ban=$id&value=0&list'>Tiltás</a>"
-          : "<a href='admin_page.php?ban=$id&value=1&list'>Aktiválás</a>";
-        echo "<div class='row'>";
-        echo "<li style='color:$color'>$username, regisztráció: $reg_date,
+          "<a href='admin_page.php?ban=$id&value=0&list' class='btn btn-warning'>Tiltás</a>"
+          : "<a href='admin_page.php?ban=$id&value=1&list' class='btn btn-warning'>Aktiválás</a>";
+        echo "<div class='row list-item'>";
+        echo "<li $class>$username, regisztráció: $reg_date,
         utolsó belépés: $login_time
-        </li><button><a href='admin_page.php?delete=$id&list'>Törlés</a></button>
-
-        <button>$ban_button</button>
-        <button>$admin_button</button></div>";
+        </li><a href='admin_page.php?delete=$id&list' class='btn btn-danger'>Törlés</a>
+        $ban_button
+        $admin_button</div>";
       }
       echo "</ul>";
       include_once('./template/admin_list.html');
