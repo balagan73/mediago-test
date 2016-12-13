@@ -65,9 +65,12 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
           "<a href='admin_page.php?ban=$id&value=0&list' class='btn btn-warning'>Tiltás</a>"
           : "<a href='admin_page.php?ban=$id&value=1&list' class='btn btn-warning'>Aktiválás</a>";
         echo "<div class='row list-item'>";
-        echo "<li $class>$username, regisztráció: $reg_date,
-        utolsó belépés: $login_time
-        </li><a href='admin_page.php?delete=$id&list' class='btn btn-danger'>Törlés</a>
+        echo "<li $class>";
+        if ($is_admin) echo "<strong>";
+        echo "$username, regisztráció: $reg_date,
+        utolsó belépés: $login_time";
+        if ($is_admin) echo "</strong>";
+        echo "</li><a href='admin_page.php?delete=$id&list' class='btn btn-danger'>Törlés</a>
         $ban_button
         $admin_button</div>";
       }
