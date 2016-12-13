@@ -51,7 +51,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
       echo "<ul>";
       foreach($result as $user) {
         $id = $user['id'];
-        $username = $user['username'];
+        $username = htmlspecialchars($user['username']);
         $is_admin = $user['is_admin'];
         $is_active = $user['is_active'];
         $login_time = $user['login_time'];
