@@ -4,15 +4,16 @@ session_start();
 include_once('./template/header.html');
 
 if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
-
   if (isset($_GET['delete']) || isset($_GET['ban']) || isset($_GET['switch']) ||
     isset($_GET['list'])) {
     if ($_SESSION['csrfKey'] != $_GET['csrfKey']) {
-      die("Lehetséges CSRF támadás!");
+      die("Nem egyező tokenek!");
     }
   }
-  $csrfToken = md5(uniqid(mt_rand(),true));
-  $_SESSION['csrfKey'] = $csrfToken;
+
+  if (isset($_SESSION['csrfKey']) && !empty($_SESSION['csrfKey'])) {
+    $token = $_SESSION['csrfKey'];
+  }
 
   $user = $_SESSION['user'];
   require('./classes/db.php');
@@ -70,18 +71,18 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
         $reg_date = $user['reg_date'];
         $class = $is_admin ? "class='text-danger'" : "class='text-info'";
         $admin_button = $is_admin ?
-          "<a href='admin_page.php?switch=$id&value=0&csrfKey=$csrfToken&list' class='btn btn-warning'>Admin jog elvétele</a>"
-          : "<a href='admin_page.php?switch=$id&value=1&csrfKey=$csrfToken&list' class='btn btn-warning $class'>Admin jog megadása</a>";
+          "<a href='admin_page.php?switch=$id&value=0&csrfKey=$token&list' class='btn btn-warning'>Admin jog elvétele</a>"
+          : "<a href='admin_page.php?switch=$id&value=1&csrfKey=$token&list' class='btn btn-warning $class'>Admin jog megadása</a>";
         $ban_button = $is_active ?
-          "<a href='admin_page.php?ban=$id&value=0&csrfKey=$csrfToken&list' class='btn btn-warning'>Tiltás</a>"
-          : "<a href='admin_page.php?ban=$id&value=1&csrfKey=$csrfToken&list' class='btn btn-warning'>Aktiválás</a>";
+          "<a href='admin_page.php?ban=$id&value=0&csrfKey=$token&list' class='btn btn-warning'>Tiltás</a>"
+          : "<a href='admin_page.php?ban=$id&value=1&csrfKey=$token&list' class='btn btn-warning'>Aktiválás</a>";
         echo "<div class='row list-item'>";
         echo "<li $class>";
         if ($is_admin) echo "<strong>";
         echo "$username, regisztráció: $reg_date,
         utolsó belépés: $login_time";
         if ($is_admin) echo "</strong>";
-        echo "</li><a href='admin_page.php?delete=$id&csrfKey=$csrfToken&list' class='btn btn-danger'>Törlés</a>
+        echo "</li><a href='admin_page.php?delete=$id&csrfKey=$token&list' class='btn btn-danger'>Törlés</a>
         $ban_button
         $admin_button</div>";
       }
@@ -90,7 +91,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
     }
     else {
       include_once('./template/admin_page_start.html');
-      echo "<a href='admin_page.php?list&csrfKey=$csrfToken' class='center-block btn btn-primary'>List users</a>";
+      echo "<a href='admin_page.php?list&csrfKey=$token' class='center-block btn btn-primary'>List users</a>";
       include_once('./template/admin_page_end.html');
     }
     include_once('./template/footer.html');

@@ -1,13 +1,13 @@
 <?php
-include_once('./template/header.html');
 session_start();
+include_once('./template/header.html');
 if (!empty($_POST)) {
-  if (!isset($_POST['login'])) {
-    session_regenerate_id();
-  }
+
+  /*
   if ($_SESSION['csrfToken'] != $_POST['csrfToken']) {
     die("Lehetséges CSRF támadás!");
   }
+  */
   require('./classes/validation.php');
   $rules = array(
     'username' => 'text',
@@ -22,7 +22,6 @@ if (!empty($_POST)) {
     $db->connect();
 
     if (isset($_POST['Login'])) {
-      echo "LOGIN";
       $username = $_POST['username'];
       $result = $db->getUser($username);
       if (count($result) == 0) {
@@ -35,7 +34,14 @@ if (!empty($_POST)) {
           $id = $result[0]['id'];
           $is_admin = $result[0]['is_admin'];
           $db->updateLogin($id);
-          session_start();
+          session_regenerate_id();
+            // CSRF Token
+          if (function_exists('mcrypt_create_iv')) {
+            $token = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+          } else {
+            $token = bin2hex(openssl_random_pseudo_bytes(32));
+          }
+          $_SESSION['csrfToken'] = $token;
           $_SESSION["login"] = time();
           $_SESSION["user"] = $username;
           $location = $is_admin ? "admin_page.php" : "normal_page.php";
@@ -56,7 +62,7 @@ if (!empty($_POST)) {
         $result = $db->getUser($reg_name);
         if (count($result) == 0) {
           $db->createUser($reg_name, $reg_email, $reg_pass, 0);
-          session_start();
+          session_regenerate_id();
           $_SESSION["login"] = time();
           $_SESSION["user"] = $reg_name;
           header("Location: normal_page.php");
@@ -72,9 +78,7 @@ if (!empty($_POST)) {
 }
 
 include_once('./template/login_start.html');
-// CSRF Token
-$csrfToken = md5(uniqid(mt_rand(),true));
-$_SESSION['csrfToken'] = $csrfToken;
+
 echo "<input type='hidden' name='csrfToken' value='$csrfToken'>";
 include_once('./template/login_end.html');
 include_once('./template/footer.html');
