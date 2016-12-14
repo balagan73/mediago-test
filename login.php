@@ -2,8 +2,9 @@
 include_once('./template/header.html');
 session_start();
 if (!empty($_POST)) {
-  echo "<pre>" . var_export($_SESSION) . "</pre>";
-  echo "<pre>" . var_export($_POST) . "</pre>";
+  if (!isset($_POST['login'])) {
+    session_regenerate_id();
+  }
   if ($_SESSION['csrfToken'] != $_POST['csrfToken']) {
     die("Lehetséges CSRF támadás!");
   }

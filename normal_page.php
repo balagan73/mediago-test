@@ -1,6 +1,5 @@
 <?php
 session_start();
-session_regenerate_id();
 include_once('./template/header.html');
 if (isset($_SESSION['login']) && $_SESSION['login'] > time() - 600) {
   $user = $_SESSION['user'];
