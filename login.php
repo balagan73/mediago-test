@@ -73,7 +73,7 @@ if (!empty($_POST)) {
 }
 
 include_once('./template/login.html');
-include_once('./template/footer.html');
+include_once('./template/login_footer.html');
 
 
 function login_validate($rules) {
