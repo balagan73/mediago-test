@@ -3,11 +3,6 @@ session_start();
 include_once('./template/header.html');
 if (!empty($_POST)) {
 
-  /*
-  if ($_SESSION['csrfToken'] != $_POST['csrfToken']) {
-    die("Lehetséges CSRF támadás!");
-  }
-  */
   require('./classes/validation.php');
   $rules = array(
     'username' => 'text',
@@ -77,10 +72,7 @@ if (!empty($_POST)) {
   }
 }
 
-include_once('./template/login_start.html');
-
-echo "<input type='hidden' name='csrfToken' value='$csrfToken'>";
-include_once('./template/login_end.html');
+include_once('./template/login.html');
 include_once('./template/footer.html');
 
 
